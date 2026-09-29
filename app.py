@@ -1,8 +1,23 @@
 import logging
+import os
 
 import streamlit as st
 
 from translator import LANGUAGES, TranslationError, get_model, translate
+
+
+def _load_streamlit_secrets() -> None:
+    # Streamlit Cloud에 배포하면 .env 대신 앱 Settings → Secrets 값을 쓴다.
+    # 로컬처럼 secrets.toml이 없으면 예외가 나므로 무시하고 .env만 사용한다.
+    try:
+        for name in ("OPENAI_API_KEY", "OPENAI_MODEL"):
+            if name in st.secrets:
+                os.environ[name] = str(st.secrets[name])
+    except Exception:
+        pass
+
+
+_load_streamlit_secrets()
 
 MAX_CHARS = 2000
 # 국기 이모지는 Windows에서 글자(US, JP…)로 보이므로 모든 환경에서 같은 모양인 텍스트 배지를 쓴다

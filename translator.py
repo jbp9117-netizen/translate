@@ -97,7 +97,8 @@ def _get_client() -> OpenAI:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise MissingAPIKeyError(
-            "OPENAI_API_KEY가 설정되지 않았습니다. .env 파일을 확인해주세요."
+            "OPENAI_API_KEY가 설정되지 않았습니다. "
+            "로컬은 .env 파일을, Streamlit Cloud는 앱 Settings → Secrets를 확인해주세요."
         )
     return OpenAI(api_key=api_key, timeout=REQUEST_TIMEOUT, max_retries=MAX_RETRIES)
 
@@ -132,7 +133,7 @@ def _request(client: OpenAI, model: str, text: str, keys: list[str]) -> str | No
             ],
         )
     except openai.AuthenticationError:
-        raise TranslationError("API 키가 유효하지 않습니다. .env 파일의 OPENAI_API_KEY를 확인해주세요.")
+        raise TranslationError("API 키가 유효하지 않습니다. .env 또는 Streamlit Secrets의 OPENAI_API_KEY를 확인해주세요.")
     except openai.RateLimitError:
         raise TranslationError("요청 한도를 초과했습니다. 잠시 후 다시 시도하거나 사용량/결제 상태를 확인해주세요.")
     except openai.APITimeoutError:
