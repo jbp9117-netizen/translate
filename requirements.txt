@@ -1,0 +1,4 @@
+# Python 3.10+ 필요. 아래 최소 버전은 실제로 테스트한 버전이다.
+openai>=3.20
+python-dotenv>=1.0
+streamlit>=1.58
